@@ -41,7 +41,8 @@ let package = Package(
         .executableTarget(
             name: "UIKItExampleModule",
             dependencies: [
-                "Shared"
+                "Shared",
+                "AccelParts"
             ]
         ),
         .target(

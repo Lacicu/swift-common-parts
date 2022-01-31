@@ -1,6 +1,11 @@
-public struct AccelParts {
-    public private(set) var text = "Hello, World!"
+//
+//  File.swift
+//
+//
+//  Created by Kyosuke Kawamura on 2022/01/31.
+//
+import UIKit
 
-    public init() {
-    }
+public class AccelParts {
+    
 }
