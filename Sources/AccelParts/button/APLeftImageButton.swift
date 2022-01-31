@@ -4,7 +4,7 @@
 //
 //  Created by Kyosuke Kawamura on 2022/01/31.
 //
-
+#if !os(macOS)
 import UIKit
 
 public class APLeftImageButton: UIButton {
@@ -16,3 +16,4 @@ public class APLeftImageButton: UIButton {
         imageView?.transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
     }
 }
+#endif

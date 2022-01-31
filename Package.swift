@@ -29,6 +29,7 @@ let package = Package(
         ),
         .testTarget(
             name: "AccelPartsTests",
-            dependencies: ["AccelParts"]),
+            dependencies: ["AccelParts"]
+        )
     ]
 )
