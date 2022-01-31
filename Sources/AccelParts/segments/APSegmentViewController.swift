@@ -14,7 +14,7 @@ import UIKit
 public class APSegmentViewController: APSegmentController {
     public weak var viewsource: APSegmentViewControllerSource? {
         didSet {
-            refresh(frame: frame)
+            reloadData()
         }
     }
     
@@ -57,8 +57,8 @@ public class APSegmentViewController: APSegmentController {
     }
     
     
-    override internal func refresh(frame: CGRect) {
-        super.refresh(frame: frame)
+    override internal func refresh() {
+        super.refresh()
         refreshBody()
     }
     

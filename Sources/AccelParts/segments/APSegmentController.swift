@@ -70,14 +70,13 @@ public class APSegmentController: UIView {
     }
     public var layout: APSegmentControllerLayout = APSegmentControllerLayout() {
         didSet {
-            setLayout()
-            refresh(frame: frame)
+            reloadData()
         }
     }
     
     public weak var delegate: APSegmentControllerDelegate? {
         didSet {
-            refresh(frame: frame)
+            reloadData()
         }
     }
     
@@ -102,7 +101,7 @@ public class APSegmentController: UIView {
     
     public func reloadData(){
         setLayout()
-        refresh(frame: frame)
+        refresh()
     }
     
     internal func setDefaultView(){
@@ -166,7 +165,7 @@ public class APSegmentController: UIView {
         })
     }
     
-    internal func refresh(frame: CGRect) {
+    internal func refresh() {
         setHeader()
     }
     
