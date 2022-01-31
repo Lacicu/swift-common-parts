@@ -21,6 +21,7 @@ class RootViewController: UIViewController {
             c.view.frame = view.frame
             if (c is APSegmentControllerTest){
                 (c as! APSegmentControllerTest).segment?.reloadData()
+                (c as! APSegmentControllerTest).segmentView?.reloadData()
             }
             let button = UIButton()
             button.setTitle(String(describing: c), for: .normal)

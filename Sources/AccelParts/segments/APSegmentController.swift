@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Kyosuke Kawamura on 2022/01/31.
 //
@@ -11,6 +11,7 @@ public class APSegmentControllerLayout {
     
     public init(){}
     
+    public var swipeable = false
     public var header: Header = Header(height: 40, tintColor: .black, backgroundColor: .clear)
     public class Header: View {
         public var tintColor: UIColor
@@ -21,7 +22,7 @@ public class APSegmentControllerLayout {
     }
     
     public var underline: View = View(height: 3, backgroundColor: .systemBlue)
-    public var body: View = View(height: 200, backgroundColor: .clear)
+    public var body: View = View(height: 0, backgroundColor: .clear)
     public class View {
         public var height: CGFloat
         public var backgroundColor: UIColor
@@ -36,14 +37,13 @@ public class APSegmentControllerLayout {
         public init(){}
         public var width: CGFloat = 80
     }
-    
-    public var swipeable = false
 }
 
 @objc public protocol APSegmentControllerDelegate: NSObjectProtocol {
     @objc optional func numberOfSections() -> Int
     @objc optional func title(titleOfSection section: Int) -> String
-    @objc optional func body(frame: CGRect, bodyOfSection section: Int) -> UIView
+    
+    @objc optional func apSegmentController(_ sender: APSegmentController, didSelectSection section: Int)
     
     /**
      * called when the menu changes or header scrolls
@@ -52,8 +52,8 @@ public class APSegmentControllerLayout {
 }
 
 public class APSegmentController: UIView {
-    private var _currentIndex: Int?
-    private var currentIndex: Int {
+    internal var _currentIndex: Int?
+    internal var currentIndex: Int {
         get {
             _currentIndex ?? 0
         }
@@ -62,8 +62,8 @@ public class APSegmentController: UIView {
         }
     }
     
-    private var buttons: [APSegmentButton] = []
-    private var sections: Int {
+    internal var buttons: [APSegmentButton] = []
+    internal var sections: Int {
         get {
             delegate?.numberOfSections?() ?? 0
         }
@@ -81,7 +81,6 @@ public class APSegmentController: UIView {
         }
     }
     
-    private var bodyView: UIView? = UIView()
     private var underline: UIView? = UIView()
     private var headerScroll: UIScrollView?  = UIScrollView()
     
@@ -106,35 +105,22 @@ public class APSegmentController: UIView {
         refresh(frame: frame)
     }
     
-    private func setDefaultView(){
+    internal func setDefaultView(){
         headerScroll?.layer.zPosition = 10
         headerScroll?.showsHorizontalScrollIndicator = false
         headerScroll?.showsVerticalScrollIndicator = false
         addSubview(headerScroll!)
         
         underline?.layer.zPosition = 20
-        
-        let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight(sender:)))
-        swipeRight.numberOfTouchesRequired = 1
-        swipeRight.direction = .right
-        bodyView?.addGestureRecognizer(swipeRight)
-        
-        let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft(sender:)))
-        swipeLeft.numberOfTouchesRequired = 1
-        swipeLeft.direction = .left
-        bodyView?.addGestureRecognizer(swipeLeft)
-        addSubview(bodyView!)
     }
     
-    private func setLayout(){
+    internal func setLayout(){
         headerScroll?.frame = CGRect(origin: .zero, size: CGSize(width: frame.width, height: layout.header.height))
         headerScroll?.backgroundColor = layout.header.backgroundColor
         
         underline?.frame.size = CGSize(width: layout.button.width, height: layout.underline.height)
         underline?.layer.cornerRadius = layout.underline.height / 2
         underline?.backgroundColor = layout.underline.backgroundColor
-        
-        bodyView?.frame = CGRect(x: 0, y: layout.header.height, width: frame.width, height: layout.body.height)
     }
     
     
@@ -171,59 +157,34 @@ public class APSegmentController: UIView {
         swipeHeader()
     }
     
-    @objc private func swipeLeft(sender: AnyObject) {
-        if (!layout.swipeable){
-            return
-        }
-        currentIndex = currentIndex + 1
-        swipeHeader()
-    }
-    
-    @objc private func swipeRight(sender: AnyObject) {
-        if (!layout.swipeable){
-            return
-        }
-        currentIndex = currentIndex - 1
-        swipeHeader()
-    }
-    
-    private func swipeHeader() {
+    internal func swipeHeader() {
         delegate?.hadInteraction?(self)
         UIView.animate(withDuration: 0.2, delay: 0, options: .curveEaseInOut, animations: { [self] in
-            let leftEnd: CGFloat = CGFloat(currentIndex) * layout.button.width
-            let rightEnd: CGFloat = CGFloat(currentIndex + 1) * layout.button.width
-            
-            if (leftEnd < headerScroll!.bounds.origin.x) {
-                headerScroll!.bounds.origin.x = leftEnd
-            } else if (headerScroll!.bounds.origin.x + headerScroll!.frame.width < rightEnd) {
-                headerScroll!.bounds.origin.x = rightEnd - headerScroll!.frame.width
-            }
-            
-            underline?.frame.origin.x = CGFloat(currentIndex) * layout.button.width
+            setSelectedButton()
         }, completion: { _ in
-            self.refreshBody()
+            self.didSelectedButton()
         })
     }
     
-    private func refresh(frame: CGRect) {
+    internal func refresh(frame: CGRect) {
         setHeader()
-        refreshBody()
     }
     
-    private func refreshBody() {
-        buttons.forEach { button in
-            button.isSelected = button.index == currentIndex
+    private func setSelectedButton() {
+        let leftEnd: CGFloat = CGFloat(currentIndex) * layout.button.width
+        let rightEnd: CGFloat = CGFloat(currentIndex + 1) * layout.button.width
+        
+        if (leftEnd < headerScroll!.bounds.origin.x) {
+            headerScroll!.bounds.origin.x = leftEnd
+        } else if (headerScroll!.bounds.origin.x + headerScroll!.frame.width < rightEnd) {
+            headerScroll!.bounds.origin.x = rightEnd - headerScroll!.frame.width
         }
-        for v in bodyView!.subviews {
-            v.removeFromSuperview()
-        }
-        guard let v = delegate?.body?(frame: bodyView!.frame, bodyOfSection: currentIndex) else {
-            return
-        }
-        v.clipsToBounds = true
-        v.frame.origin.y = 0
-        v.frame.size.height = layout.body.height
-        bodyView?.addSubview(v)
+        
+        underline?.frame.origin.x = CGFloat(currentIndex) * layout.button.width
+    }
+    
+    internal func didSelectedButton() {
+        delegate?.apSegmentController?(self, didSelectSection: currentIndex)
     }
 }
 
