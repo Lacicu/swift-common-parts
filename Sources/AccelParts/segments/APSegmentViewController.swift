@@ -8,7 +8,7 @@
 import UIKit
 
 @objc public protocol APSegmentViewControllerSource: NSObjectProtocol {
-    @objc optional func body(frame: CGRect, bodyOfSection section: Int) -> UIView
+    @objc optional func body(_ sender: APSegmentViewController, frame: CGRect, bodyOfSection section: Int) -> UIView
 }
 
 public class APSegmentViewController: APSegmentController {
@@ -71,7 +71,7 @@ public class APSegmentViewController: APSegmentController {
         for v in bodyView!.subviews {
             v.removeFromSuperview()
         }
-        guard let v = viewsource?.body?(frame: bodyView!.frame, bodyOfSection: currentIndex) else {
+        guard let v = viewsource?.body?(self, frame: bodyView!.frame, bodyOfSection: currentIndex) else {
             return
         }
         v.clipsToBounds = true

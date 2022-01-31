@@ -40,8 +40,8 @@ public class APSegmentControllerLayout {
 }
 
 @objc public protocol APSegmentControllerDelegate: NSObjectProtocol {
-    @objc optional func numberOfSections() -> Int
-    @objc optional func title(titleOfSection section: Int) -> String
+    @objc optional func numberOfSections(_ sender: APSegmentController) -> Int
+    @objc optional func title(_ sender: APSegmentController, titleOfSection section: Int) -> String
     
     @objc optional func apSegmentController(_ sender: APSegmentController, didSelectSection section: Int)
     
@@ -65,7 +65,7 @@ public class APSegmentController: UIView {
     internal var buttons: [APSegmentButton] = []
     internal var sections: Int {
         get {
-            delegate?.numberOfSections?() ?? 0
+            delegate?.numberOfSections?(self) ?? 0
         }
     }
     public var layout: APSegmentControllerLayout = APSegmentControllerLayout() {
@@ -136,7 +136,7 @@ public class APSegmentController: UIView {
         
         for i in 0..<sections {
             let button = APSegmentButton(index: i)
-            button.setTitle(delegate?.title?(titleOfSection: i) ?? "", for: .normal)
+            button.setTitle(delegate?.title?(self, titleOfSection: i) ?? "", for: .normal)
             button.setTitleColor(layout.header.tintColor, for: .normal)
             button.addTarget(self, action: #selector(tapSegmentedButton(_:)), for: .touchUpInside)
             button.frame = CGRect(origin: CGPoint(x: CGFloat(i) * layout.button.width, y: 0), size: buttonSize)

@@ -49,11 +49,11 @@ class APSegmentControllerTest: UIViewController {
 }
 
 extension APSegmentControllerTest: APSegmentControllerDelegate {
-    func numberOfSections() -> Int {
+    func numberOfSections(_ sender: APSegmentController) -> Int {
         titles.count
     }
     
-    func title(titleOfSection section: Int) -> String {
+    func title(_ sender: APSegmentController, titleOfSection section: Int) -> String {
         titles[section]
     }
     
@@ -67,7 +67,7 @@ extension APSegmentControllerTest: APSegmentControllerDelegate {
 }
 
 extension APSegmentControllerTest: APSegmentViewControllerSource {
-    func body(frame: CGRect, bodyOfSection section: Int) -> UIView {
+    func body(_ sender: APSegmentViewController, frame: CGRect, bodyOfSection section: Int) -> UIView {
         let v = UIView(frame: frame)
         v.backgroundColor = [UIColor.red, UIColor.blue, UIColor.black, UIColor.yellow][section % 4]
         return v
