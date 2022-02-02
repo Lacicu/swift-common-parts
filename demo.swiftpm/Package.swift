@@ -35,7 +35,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(name: "AccelParts", path: "/Users/kyosuke/Git/github.com/swift-common-parts")
+        .package(name: "AccelParts", path: "../")
     ],
     targets: [
         .executableTarget(
