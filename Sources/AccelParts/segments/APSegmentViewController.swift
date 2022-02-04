@@ -7,10 +7,6 @@
 #if !os(macOS)
 import UIKit
 
-@objc public protocol APSegmentViewControllerSource: NSObjectProtocol {
-    @objc optional func body(_ sender: APSegmentViewController, frame: CGRect, bodyOfSection section: Int) -> UIView
-}
-
 public class APSegmentViewController: APSegmentController {
     public weak var viewsource: APSegmentViewControllerSource? {
         didSet {
