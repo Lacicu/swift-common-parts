@@ -8,7 +8,7 @@
 import UIKit
 import AccelParts
 
-class APScrollingHeaderViewTest: UIViewController {
+class APScrollingHeaderViewScrollTest: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
@@ -16,21 +16,25 @@ class APScrollingHeaderViewTest: UIViewController {
         let layout = APScrollingHeaderViewLayout()
         layout.header.height = 300
         layout.miniHeader.height = 100
+        layout.mode = .scroll
         
-        let testView = TestView(frame: view.frame, layout: layout)
+        let testView = TestScrollView(frame: view.frame, layout: layout)
         testView.delegate = testView
         testView.datasource = testView
         view.addSubview(testView)
     }
 }
 
-class TestView: APScrollingHeaderView {}
-
-extension TestView: ScrollHeaderViewDatasource {
+class TestScrollView: APScrollingHeaderView {}
+extension TestScrollView: ScrollHeaderViewDatasource {
     
     func header(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView {
         let header = UIView()
-        header.backgroundColor = .red
+        let label = UILabel()
+        label.frame = CGRect(x: 100, y: 100, width: 100, height: 60)
+        label.text = "test foreground"
+        header.addSubview(label)
+        header.backgroundColor = .yellow // test fot not being used
         return header
     }
     
@@ -48,7 +52,7 @@ extension TestView: ScrollHeaderViewDatasource {
     }
 }
 
-extension TestView: APScrollingHeaderViewDelegate {
+extension TestScrollView: APScrollingHeaderViewDelegate {
     func refresh(_ apScrollingHeaderView: APScrollingHeaderView, frame: CGRect) {
         print("refresh(_:frame:)")
     }

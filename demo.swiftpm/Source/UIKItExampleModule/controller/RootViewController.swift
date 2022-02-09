@@ -12,7 +12,8 @@ class RootViewController: UIViewController {
     
     let controllers: [UIViewController] = [
         APSegmentControllerTest(),
-        APScrollingHeaderViewTest()
+        APScrollingHeaderViewScrollTest(),
+        APScrollingHeaderViewCoverTest()
     ]
     
     override func viewDidLoad() {
@@ -28,7 +29,9 @@ class RootViewController: UIViewController {
             case "APSegmentControllerTest":
                 (c as! APSegmentControllerTest).segment?.reloadData()
                 (c as! APSegmentControllerTest).segmentView?.reloadData()
-            case "APScrollingHeaderViewTest":
+            case "APScrollingHeaderViewScrollTest":
+                print("No Action for now")
+            case "APScrollingHeaderViewCoverTest":
                 print("No Action for now")
             default:
                 print("No Action")

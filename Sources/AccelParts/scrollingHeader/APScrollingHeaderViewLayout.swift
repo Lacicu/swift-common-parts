@@ -8,11 +8,22 @@
 import UIKit
 
 public class APScrollingHeaderViewLayout {
+    /**
+     * determine how the header scrolls
+     */
+    public enum Mode {
+        case scroll
+        case cover
+    }
     
     public init(){}
-    
+
     public var header: Header = Header(height: 300)
     public var miniHeader: Header = Header(height: 100)
+    
+    public var mode: Mode = .scroll
+    public var backgroundRatio: CGFloat = 0.8
+    public var backgroundOffset: CGFloat = 50
     
     public class Header {
         public var height: CGFloat

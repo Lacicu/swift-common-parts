@@ -10,11 +10,13 @@ import UIKit
 open class APScrollingHeaderView: UIView {
     
     private var header: UIView?
+    private var headerBackground: UIView?
     private var miniHeader: UIView?
     private var scrollView: UIScrollView?
     
     public var layout: APScrollingHeaderViewLayout {
         didSet {
+            setLayout()
             refresh(frame: frame)
         }
     }
@@ -28,21 +30,35 @@ open class APScrollingHeaderView: UIView {
     open weak var datasource: ScrollHeaderViewDatasource? {
         didSet {
             scrollView = datasource?.scrollView?(self) ?? UIScrollView()
-            scrollView?.frame.origin = CGPoint(x: 0, y: layout.header.height)
-            scrollView?.frame.size = CGSize(width: frame.width, height: frame.height - layout.header.height)
             scrollView?.layer.zPosition = 10
             
             header = datasource?.header?(self) ?? UIView()
-            header?.frame.size = CGSize(width: frame.width, height: layout.header.height)
             header?.layer.zPosition = 20
             
+            headerBackground = datasource?.headerBackground?(self) ?? UIView()
+            headerBackground?.layer.zPosition = -10
+            
             miniHeader = datasource?.miniHeader?(self) ?? UIView()
-            miniHeader?.frame.size = CGSize(width: frame.width, height: layout.miniHeader.height)
             miniHeader?.alpha = 0
             miniHeader?.layer.zPosition = 30
             
+            setLayout()
             refresh(frame: frame)
         }
+    }
+    
+    private func setLayout(){
+        scrollView?.frame.origin = CGPoint(x: 0, y: layout.header.height)
+        scrollView?.frame.size = CGSize(width: frame.width, height: frame.height - layout.header.height)
+        
+        header?.frame.size = CGSize(width: frame.width, height: layout.header.height)
+        if (layout.mode == .cover){ // if cover mode(header backgorund will be clear to show bg view)
+            header?.backgroundColor = .clear
+        }
+        
+        headerBackground?.frame.size = CGSize(width: frame.width, height: layout.header.height + layout.backgroundOffset)
+        
+        miniHeader?.frame.size = CGSize(width: frame.width, height: layout.miniHeader.height)
     }
     
     private func refresh(frame: CGRect) {
@@ -51,6 +67,9 @@ open class APScrollingHeaderView: UIView {
         }
         if let h = header {
             addSubview(h)
+        }
+        if let hbg = headerBackground {
+            addSubview(hbg)
         }
         if let mh = miniHeader {
             addSubview(mh)
@@ -97,6 +116,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 scrollView.frame.origin.y -= deltaY
                 scrollView.bounds.origin.y = 0
                 header?.frame.origin.y = scrollView.frame.origin.y - layout.header.height
+                headerBackground?.frame.size.height = max(scrollView.frame.origin.y + layout.backgroundOffset, (layout.header.height + layout.backgroundOffset) * layout.backgroundRatio)
                 
                 // viewの高さを計算
                 scrollView.frame.size.height = frame.height - scrollView.frame.origin.y
@@ -104,17 +124,20 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 // viewの透過度を調整
                 let ratio = (scrollView.frame.origin.y - safeAreaInsets.top) / (layout.header.height - safeAreaInsets.top)
                 header?.alpha = layout.header.alpha(ratio: ratio)
+                headerBackground?.alpha = layout.header.alpha(ratio: ratio)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 1 - ratio)
             } else {
                 // スクロールの移動を計算
                 scrollView.frame.origin.y = layout.header.height
                 header?.frame.origin.y = 0
+                headerBackground?.frame.size.height = scrollView.frame.origin.y + layout.backgroundOffset
                 
                 // viewの高さを計算
                 scrollView.frame.size.height = frame.height - scrollView.frame.origin.y
                 
                 // viewの透過度を調整
                 header?.alpha = layout.header.alpha(ratio: 1)
+                headerBackground?.alpha = layout.header.alpha(ratio: 1)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 0)
             }
         } else { // 下を表示
@@ -124,6 +147,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 scrollView.frame.origin.y -= deltaY
                 scrollView.bounds.origin.y = 0
                 header?.frame.origin.y = scrollView.frame.origin.y - layout.header.height
+                headerBackground?.frame.size.height = max(scrollView.frame.origin.y + layout.backgroundOffset, (layout.header.height + layout.backgroundOffset) * layout.backgroundRatio)
                 
                 // viewの高さを計算
                 scrollView.frame.size.height = frame.height - scrollView.frame.origin.y
@@ -131,6 +155,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 // viewの透過度を調整
                 let ratio = (scrollView.frame.origin.y - safeAreaInsets.top) / (layout.header.height - safeAreaInsets.top)
                 header?.alpha = layout.header.alpha(ratio: ratio)
+                headerBackground?.alpha = layout.header.alpha(ratio: ratio)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 1 - ratio)
             } else {
                 // スクロールの移動を計算
@@ -141,6 +166,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 
                 // viewの透過度を調整
                 header?.alpha = layout.header.alpha(ratio: 0)
+                headerBackground?.alpha = layout.header.alpha(ratio: 0)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 1)
             }
         }
