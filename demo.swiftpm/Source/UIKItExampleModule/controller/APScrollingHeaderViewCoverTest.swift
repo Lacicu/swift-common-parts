@@ -26,7 +26,7 @@ class APScrollingHeaderViewCoverTest: UIViewController {
 }
 
 class TestCoverView: APScrollingHeaderView {}
-extension TestCoverView: APScrollHeaderViewDatasource {
+extension TestCoverView: APScrollingHeaderViewDatasource {
     
     func header(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView {
         let header = UIView()

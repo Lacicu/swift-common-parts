@@ -28,7 +28,7 @@ open class APScrollingHeaderView: UIView {
         }
     }
     
-    open weak var datasource: APScrollHeaderViewDatasource? {
+    open weak var datasource: APScrollingHeaderViewDatasource? {
         didSet {
             scrollView = datasource?.scrollView?(self) ?? UIScrollView()
             scrollView?.layer.zPosition = 10

@@ -7,7 +7,7 @@
 #if !os(macOS)
 import UIKit
 
-@objc public protocol APScrollHeaderViewDatasource: NSObjectProtocol {
+@objc public protocol APScrollingHeaderViewDatasource: NSObjectProtocol {
     @objc optional func scrollView(_ apScrollingHeaderView: APScrollingHeaderView) -> UIScrollView
     @objc optional func header(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView
     @objc optional func headerBackground(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView
