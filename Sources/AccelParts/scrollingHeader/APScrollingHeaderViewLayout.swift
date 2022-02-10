@@ -22,8 +22,10 @@ public class APScrollingHeaderViewLayout {
     public var miniHeader: Header = Header(height: 100)
     
     public var mode: Mode = .scroll
-    public var backgroundRatio: CGFloat = 0.8
     public var backgroundOffset: CGFloat = 50
+    
+    internal var backgroundExpansion: CGFloat = 1.05
+    internal var backgroundRatio: CGFloat = 0.8
     
     public class Header {
         public var height: CGFloat

@@ -50,6 +50,11 @@ open class APScrollingHeaderView: UIView {
     private func setLayout(){
         scrollView?.frame.origin = CGPoint(x: 0, y: layout.header.height)
         scrollView?.frame.size = CGSize(width: frame.width, height: frame.height - layout.header.height)
+        if (layout.mode == .cover){ // if cover mode
+            scrollView?.bounces = true
+            scrollView?.alwaysBounceVertical = true
+            scrollView?.showsVerticalScrollIndicator = false
+        }
         
         header?.frame.size = CGSize(width: frame.width, height: layout.header.height)
         if (layout.mode == .cover){ // if cover mode(header backgorund will be clear to show bg view)
@@ -111,6 +116,13 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
         let bounds = scrollView.bounds
         let deltaY: CGFloat = bounds.origin.y
         if (deltaY <= 0) { // 上を表示
+            if (header!.frame.origin.y == 0){ // bouncing
+                header?.frame.size.height = layout.header.height - deltaY
+                headerBackground?.frame.size.height = max(
+                    layout.header.height + layout.backgroundOffset - deltaY,
+                    (layout.header.height + layout.backgroundOffset) * layout.backgroundExpansion)
+                return
+            }
             if (scrollView.frame.origin.y < layout.header.height) { // ヘッダー移動中
                 // スクロールの移動を計算
                 scrollView.frame.origin.y -= deltaY

@@ -35,6 +35,14 @@ extension TestCoverView: ScrollHeaderViewDatasource {
         label.text = "test foreground"
         header.addSubview(label)
         header.backgroundColor = .yellow // test fot not being used
+        
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.sizeToFit()
+        NSLayoutConstraint.activate([
+            label.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: 0),
+            label.centerXAnchor.constraint(equalTo: header.centerXAnchor, constant: 0)
+        ])
+        
         return header
     }
     
@@ -50,7 +58,6 @@ extension TestCoverView: ScrollHeaderViewDatasource {
             imageView.topAnchor.constraint(equalTo: header.topAnchor, constant: 0),
             imageView.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: 0),
             imageView.centerXAnchor.constraint(equalTo: header.centerXAnchor, constant: 0)
-//            , imageView.widthAnchor.constraint(equalTo: header.centerYAnchor, constant: 0)
         ])
         return header
     }
@@ -63,8 +70,24 @@ extension TestCoverView: ScrollHeaderViewDatasource {
     
     func scrollView(_ apScrollingHeaderView: APScrollingHeaderView) -> UIScrollView {
         let scrollView = UIScrollView()
-        scrollView.backgroundColor  = .green
         scrollView.contentSize = CGSize(width: frame.width, height: frame.height * 3)
+        
+        let view = UIView(frame: CGRect(origin: .zero, size: scrollView.contentSize) )
+        view.backgroundColor  = .green
+        scrollView.addSubview(view)
+        
+        let top = UILabel()
+        top.frame = CGRect(x: 0, y: 0, width: 0, height: 60)
+        top.text = "Top of the ScrollView"
+        top.sizeToFit()
+        view.addSubview(top)
+        
+        let bottom = UILabel()
+        bottom.frame = CGRect(x: 0, y: frame.height * 3 - 60, width: 0, height: 60)
+        bottom.text = "Bottom of the ScrollView"
+        bottom.sizeToFit()
+        view.addSubview(bottom)
+        
         return scrollView
     }
 }
