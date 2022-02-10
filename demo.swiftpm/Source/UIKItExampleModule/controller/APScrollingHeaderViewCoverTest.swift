@@ -46,20 +46,8 @@ extension TestCoverView: ScrollHeaderViewDatasource {
         return header
     }
     
-    func headerBackground(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView {
-        let header = UIView()
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "pokemon")
-        imageView.contentMode = .scaleAspectFit
-        header.addSubview(imageView)
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: header.topAnchor, constant: 0),
-            imageView.bottomAnchor.constraint(equalTo: header.bottomAnchor, constant: 0),
-            imageView.centerXAnchor.constraint(equalTo: header.centerXAnchor, constant: 0)
-        ])
-        return header
+    func headerBackgroundImage(_ apScrollingHeaderView: APScrollingHeaderView) -> UIImage {
+        return UIImage(named: "pokemon")!
     }
     
     func miniHeader(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView {

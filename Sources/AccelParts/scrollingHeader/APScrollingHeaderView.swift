@@ -11,6 +11,7 @@ open class APScrollingHeaderView: UIView {
     
     private var header: UIView?
     private var headerBackground: UIView?
+    private var headerBackgroundImage: UIImage?
     private var miniHeader: UIView?
     private var scrollView: UIScrollView?
     
@@ -35,7 +36,13 @@ open class APScrollingHeaderView: UIView {
             header = datasource?.header?(self) ?? UIView()
             header?.layer.zPosition = 20
             
-            headerBackground = datasource?.headerBackground?(self) ?? UIView()
+            // priority [headerBackground > headerBackgroundImage]
+            if let hbg = datasource?.headerBackground?(self) {
+                headerBackground = hbg
+            } else {
+                headerBackground = UIView()
+                headerBackgroundImage = datasource?.headerBackgroundImage?(self)
+            }
             headerBackground?.layer.zPosition = -10
             
             miniHeader = datasource?.miniHeader?(self) ?? UIView()
@@ -75,6 +82,20 @@ open class APScrollingHeaderView: UIView {
         }
         if let hbg = headerBackground {
             addSubview(hbg)
+            
+            // add image if image is set
+            if let image = headerBackgroundImage {
+                let imageView = UIImageView()
+                imageView.image = image
+                imageView.contentMode = .scaleAspectFit
+                hbg.addSubview(imageView)
+                imageView.translatesAutoresizingMaskIntoConstraints = false
+                NSLayoutConstraint.activate([
+                    imageView.topAnchor.constraint(equalTo: hbg.topAnchor, constant: 0),
+                    imageView.bottomAnchor.constraint(equalTo: hbg.bottomAnchor, constant: 0),
+                    imageView.centerXAnchor.constraint(equalTo: hbg.centerXAnchor, constant: 0)
+                ])
+            }
         }
         if let mh = miniHeader {
             addSubview(mh)
@@ -118,7 +139,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
         if (deltaY <= 0) { // 上を表示
             if (header!.frame.origin.y == 0){ // bouncing
                 header?.frame.size.height = layout.header.height - deltaY
-                headerBackground?.frame.size.height = max(
+                headerBackground?.frame.size.height = min(
                     layout.header.height + layout.backgroundOffset - deltaY,
                     (layout.header.height + layout.backgroundOffset) * layout.backgroundExpansion)
                 return
@@ -185,7 +206,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
         
         // 一番下でさらにドラッグされたら追加読込
         if bounds.origin.y >= (scrollView.contentSize.height - scrollView.frame.height + (layout.miniHeader.height - safeAreaInsets.top)) {
-
+            
             delegate?.didScrollToBottom?(self)
         }
     }
