@@ -83,28 +83,47 @@ public class APSegmentController: UIView {
         for v in headerScroll!.subviews {
             v.removeFromSuperview()
         }
-        
-        underline?.frame.origin = CGPoint(x: 0, y: layout.header.height - layout.underline.height)
+    
         headerScroll?.addSubview(underline!)
         
         buttons = []
         let buttonSize = CGSize(width: layout.button.width, height: layout.header.height - layout.underline.height)
+        var buttonX: CGFloat = layout.margin
         
         for i in 0..<sections {
             let button = APSegmentButton(index: i)
             button.setTitle(delegate?.title?(self, titleOfSection: i) ?? "", for: .normal)
             button.setTitleColor(layout.header.tintColor, for: .normal)
             button.addTarget(self, action: #selector(tapSegmentedButton(_:)), for: .touchUpInside)
-            button.frame = CGRect(origin: CGPoint(x: CGFloat(i) * layout.button.width, y: 0), size: buttonSize)
+            switch (layout.contentMode){
+            case .constant:
+                button.frame = CGRect(origin: CGPoint(x: CGFloat(i) * layout.button.width, y: 0), size: buttonSize)
+            case .fit:
+                button.sizeToFit()
+                button.frame.size.height = buttonSize.height
+                button.frame.origin = CGPoint(x: buttonX, y: 0)
+                buttonX += button.frame.size.width + layout.margin
+            }
             headerScroll!.addSubview(button)
             buttons.append(button)
         }
         
+        underline?.frame.origin = CGPoint(x: buttons[currentIndex].frame.origin.x, y: layout.header.height - layout.underline.height)
+        underline?.frame.size.width = buttons[currentIndex].frame.width
+        
         headerScroll?.delegate = self
-        headerScroll?.contentSize = CGSize(
-            width: CGFloat(sections) * layout.button.width,
-            height: layout.header.height
-        )
+        switch (layout.contentMode){
+        case .constant:
+            headerScroll?.contentSize = CGSize(
+                width: CGFloat(sections) * layout.button.width,
+                height: layout.header.height
+            )
+        case .fit:
+            headerScroll?.contentSize = CGSize(
+                width: buttonX,
+                height: layout.header.height
+            )
+        }
     }
     
     @objc private func tapSegmentedButton(_ sender: APSegmentButton) {
@@ -126,8 +145,8 @@ public class APSegmentController: UIView {
     }
     
     private func setSelectedButton() {
-        let leftEnd: CGFloat = CGFloat(currentIndex) * layout.button.width
-        let rightEnd: CGFloat = CGFloat(currentIndex + 1) * layout.button.width
+        let leftEnd: CGFloat = buttons[currentIndex].frame.origin.x
+        let rightEnd: CGFloat = buttons[currentIndex].frame.origin.x + buttons[currentIndex].frame.width
         
         if (leftEnd < headerScroll!.bounds.origin.x) {
             headerScroll!.bounds.origin.x = leftEnd
@@ -135,7 +154,8 @@ public class APSegmentController: UIView {
             headerScroll!.bounds.origin.x = rightEnd - headerScroll!.frame.width
         }
         
-        underline?.frame.origin.x = CGFloat(currentIndex) * layout.button.width
+        underline?.frame.origin.x = buttons[currentIndex].frame.origin.x
+        underline?.frame.size.width = buttons[currentIndex].frame.width
     }
     
     internal func didSelectedButton() {

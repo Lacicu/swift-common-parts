@@ -15,7 +15,7 @@ public class APSegmentControllerLayout {
     public var header: Header = Header(height: 40, tintColor: .black, backgroundColor: .clear)
     public class Header: View {
         public var tintColor: UIColor
-        public init(height: CGFloat,tintColor: UIColor, backgroundColor: UIColor){
+        public init(height: CGFloat, tintColor: UIColor, backgroundColor: UIColor){
             self.tintColor = tintColor
             super.init(height: height, backgroundColor: backgroundColor)
         }
@@ -36,6 +36,13 @@ public class APSegmentControllerLayout {
     public class Button {
         public init(){}
         public var width: CGFloat = 80
+    }
+    
+    public var contentMode: Mode = .constant
+    public var margin: CGFloat = 20
+    public enum Mode {
+        case constant
+        case fit
     }
 }
 #endif

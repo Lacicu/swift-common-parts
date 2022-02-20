@@ -10,7 +10,7 @@ import AccelParts
 
 class APSegmentControllerTest: UIViewController {
     
-    let titles = ["国語", "英語", "数学", "理科", "社会", "道徳", "体育", "保健"]
+    let titles = ["国語", "英語", "数学", "理科", "社会社会社会社会", "道徳", "体育", "保健"]
     var segment: APSegmentController?
     var segmentView: APSegmentViewController?
     
@@ -23,6 +23,7 @@ class APSegmentControllerTest: UIViewController {
         l1.header.height = 40
         l1.underline.height = 4
         l1.underline.backgroundColor = .orange
+        l1.contentMode = .fit
         
         // set controller
         segment = APSegmentController(frame: view.frame, layout: l1)
