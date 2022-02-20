@@ -94,6 +94,7 @@ public class APSegmentController: UIView {
             let button = APSegmentButton(index: i)
             button.setTitle(delegate?.title?(self, titleOfSection: i) ?? "", for: .normal)
             button.setTitleColor(layout.header.tintColor, for: .normal)
+            button.titleLabel?.font = layout.header.font
             button.addTarget(self, action: #selector(tapSegmentedButton(_:)), for: .touchUpInside)
             switch (layout.contentMode){
             case .constant:

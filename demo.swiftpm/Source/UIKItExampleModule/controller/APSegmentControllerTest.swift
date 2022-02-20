@@ -21,6 +21,8 @@ class APSegmentControllerTest: UIViewController {
         // set layout
         let l1 = APSegmentControllerLayout()
         l1.header.height = 40
+        l1.header.tintColor = .red
+        l1.header.font = UIFont.boldSystemFont(ofSize: 20)
         l1.underline.height = 4
         l1.underline.backgroundColor = .orange
         l1.contentMode = .fit

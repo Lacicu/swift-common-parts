@@ -15,6 +15,7 @@ public class APSegmentControllerLayout {
     public var header: Header = Header(height: 40, tintColor: .black, backgroundColor: .clear)
     public class Header: View {
         public var tintColor: UIColor
+        public var font: UIFont = UIFont.systemFont(ofSize: 12)
         public init(height: CGFloat, tintColor: UIColor, backgroundColor: UIColor){
             self.tintColor = tintColor
             super.init(height: height, backgroundColor: backgroundColor)
