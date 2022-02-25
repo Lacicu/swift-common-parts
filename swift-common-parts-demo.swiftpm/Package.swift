@@ -8,13 +8,13 @@ import PackageDescription
 import AppleProductTypes
 
 let package = Package(
-    name: "APDemo",
+    name: "common-parts",
     platforms: [
         .iOS("13.0")
     ],
     products: [
         .iOSApplication(
-            name: "APDemo",
+            name: "common-parts",
             targets: ["UIKItExampleModule"],
             bundleIdentifier: "jp.co.lacicu.apdemo",
             teamIdentifier: "L6KA777G24",
