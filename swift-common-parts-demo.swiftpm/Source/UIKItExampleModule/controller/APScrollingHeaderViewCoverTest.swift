@@ -88,4 +88,8 @@ extension TestCoverView: APScrollingHeaderViewDelegate {
     func didScrollToBottom(_ apScrollingHeaderView: APScrollingHeaderView){
         print("didScrollToBottom(_:)")
     }
+    
+    func cover(_ apScrollingHeaderView: APScrollingHeaderView, headerRatio ratio: CGFloat) {
+        print("cover(_: headerRatio: \(ratio)")
+    }
 }

@@ -159,6 +159,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 header?.alpha = layout.header.alpha(ratio: ratio)
                 headerBackground?.alpha = layout.header.alpha(ratio: ratio)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 1 - ratio)
+                delegate?.cover?(self, headerRatio: ratio)
             } else {
                 // スクロールの移動を計算
                 scrollView.frame.origin.y = layout.header.height
@@ -172,6 +173,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 header?.alpha = layout.header.alpha(ratio: 1)
                 headerBackground?.alpha = layout.header.alpha(ratio: 1)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 0)
+                delegate?.cover?(self, headerRatio: 1)
             }
         } else { // 下を表示
             if (scrollView.frame.origin.y > safeAreaInsets.top) { // ヘッダー移動中
@@ -190,6 +192,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 header?.alpha = layout.header.alpha(ratio: ratio)
                 headerBackground?.alpha = layout.header.alpha(ratio: ratio)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 1 - ratio)
+                delegate?.cover?(self, headerRatio: ratio)
             } else {
                 // スクロールの移動を計算
                 scrollView.frame.origin.y = safeAreaInsets.top
@@ -201,6 +204,7 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
                 header?.alpha = layout.header.alpha(ratio: 0)
                 headerBackground?.alpha = layout.header.alpha(ratio: 0)
                 miniHeader?.alpha = layout.miniHeader.alpha(ratio: 1)
+                delegate?.cover?(self, headerRatio: 0)
             }
         }
         

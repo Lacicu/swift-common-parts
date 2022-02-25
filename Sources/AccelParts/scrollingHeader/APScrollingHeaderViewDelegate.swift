@@ -9,6 +9,7 @@ import UIKit
 
 @objc public protocol APScrollingHeaderViewDelegate: NSObjectProtocol {
     @objc optional func refresh(_ apScrollingHeaderView: APScrollingHeaderView, frame: CGRect)
+    @objc optional func cover(_ apScrollingHeaderView: APScrollingHeaderView, headerRatio ratio: CGFloat)
     @objc optional func didScrollToBottom(_ apScrollingHeaderView: APScrollingHeaderView)
 }
 #endif
