@@ -139,9 +139,9 @@ extension APScrollingHeaderView: UIScrollViewDelegate {
         if (deltaY <= 0) { // 上を表示
             if (header!.frame.origin.y == 0){ // bouncing
                 header?.frame.size.height = layout.header.height - deltaY
-                headerBackground?.frame.size.height = min(
-                    layout.header.height + layout.backgroundOffset - deltaY,
-                    (layout.header.height + layout.backgroundOffset) * layout.backgroundExpansion)
+                headerBackground?.frame.size.height = max(
+                    layout.header.height - deltaY,
+                    layout.header.height + layout.backgroundOffset)
                 return
             }
             if (scrollView.frame.origin.y < layout.header.height) { // ヘッダー移動中
