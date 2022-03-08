@@ -32,8 +32,10 @@ open class APScrollingHeaderView: UIView {
         didSet {
             scrollView = datasource?.scrollView?(self) ?? UIScrollView()
             scrollView?.layer.zPosition = 10
+            scrollView?.clipsToBounds = true
             
             header = datasource?.header?(self) ?? UIView()
+            header?.clipsToBounds = true
             header?.layer.zPosition = 20
             
             // priority [headerBackground > headerBackgroundImage]
@@ -43,10 +45,12 @@ open class APScrollingHeaderView: UIView {
                 headerBackground = UIView()
                 headerBackgroundImage = datasource?.headerBackgroundImage?(self)
             }
+            headerBackground?.clipsToBounds = true
             headerBackground?.layer.zPosition = -10
             
             miniHeader = datasource?.miniHeader?(self) ?? UIView()
             miniHeader?.alpha = 0
+            miniHeader?.clipsToBounds = true
             miniHeader?.layer.zPosition = 30
             
             setLayout()
@@ -127,7 +131,6 @@ open class APScrollingHeaderView: UIView {
     }
     
     private func setUp(){
-        clipsToBounds = true
         backgroundColor = .white
     }
 }

@@ -19,6 +19,7 @@ class APScrollingHeaderViewCoverTest: UIViewController {
         layout.mode = .cover
         
         let testView = TestCoverView(frame: view.frame, layout: layout)
+        // testView.frame.origin = CGPoint(x: 20, y: 20) // add padding to check clipsToBounds
         testView.delegate = testView
         testView.datasource = testView
         view.addSubview(testView)
