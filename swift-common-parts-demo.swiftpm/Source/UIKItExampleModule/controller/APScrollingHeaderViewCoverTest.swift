@@ -29,6 +29,23 @@ class APScrollingHeaderViewCoverTest: UIViewController {
 class TestCoverView: APScrollingHeaderView {}
 extension TestCoverView: APScrollingHeaderViewDatasource {
     
+    private func getPixelColor(image: UIImage ,pos: CGPoint) -> UIColor {
+        guard let pixelData = image.cgImage?.dataProvider?.data  else {
+            return .clear
+        }
+        
+        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
+        
+        let pixelInfo: Int = ((Int(image.size.width) * Int(pos.y)) + Int(pos.x)) * 4
+        
+        let r = CGFloat(data[pixelInfo]) / CGFloat(255.0)
+        let g = CGFloat(data[pixelInfo+1]) / CGFloat(255.0)
+        let b = CGFloat(data[pixelInfo+2]) / CGFloat(255.0)
+        let a = CGFloat(data[pixelInfo+3]) / CGFloat(255.0)
+        
+        return UIColor(red: r, green: g, blue: b, alpha: a)
+    }
+    
     func header(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView {
         let header = UIView()
         let label = UILabel()
@@ -48,7 +65,11 @@ extension TestCoverView: APScrollingHeaderViewDatasource {
     }
     
     func headerBackgroundImage(_ apScrollingHeaderView: APScrollingHeaderView) -> UIImage {
-        return UIImage(named: "pokemon")!
+        return UIImage(named: "pokemon2")!
+    }
+    
+    func headerBackgroundImageColor(_ apScrollingHeaderView: APScrollingHeaderView) -> UIColor {
+        return getPixelColor(image: UIImage(named: "pokemon2")!, pos: CGPoint(x: 10, y: 10))
     }
     
     func miniHeader(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView {

@@ -12,6 +12,7 @@ import UIKit
     @objc optional func header(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView
     @objc optional func headerBackground(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView
     @objc optional func headerBackgroundImage(_ apScrollingHeaderView: APScrollingHeaderView) -> UIImage
+    @objc optional func headerBackgroundImageColor(_ apScrollingHeaderView: APScrollingHeaderView) -> UIColor
     @objc optional func miniHeader(_ apScrollingHeaderView: APScrollingHeaderView) -> UIView
 }
 #endif

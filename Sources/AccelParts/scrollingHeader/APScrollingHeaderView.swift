@@ -44,6 +44,9 @@ open class APScrollingHeaderView: UIView {
             } else {
                 headerBackground = UIView()
                 headerBackgroundImage = datasource?.headerBackgroundImage?(self)
+                if let color = datasource?.headerBackgroundImageColor?(self) {
+                    headerBackground?.backgroundColor = color
+                }
             }
             headerBackground?.clipsToBounds = true
             headerBackground?.layer.zPosition = -10
